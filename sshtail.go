@@ -67,9 +67,9 @@ func main() {
 	wg := sync.WaitGroup{}
 	for _, host := range hosts {
 		wg.Add(1)
-		go func() {
+		go func(h string) {
 			defer wg.Done()
-			client, err := ssh.Dial("tcp", host, config)
+			client, err := ssh.Dial("tcp", h, config)
 			if err != nil {
 				fatalf("Failed to dial: %v", err)
 			}
@@ -85,7 +85,7 @@ func main() {
 			if err := session.Run(cmd); err != nil {
 				fatalf("Failed to run:", err)
 			}
-		}()
+		}(host)
 	}
 	wg.Wait()
 }
